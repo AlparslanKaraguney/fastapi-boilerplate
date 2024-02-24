@@ -18,11 +18,14 @@ test:
 data_test:
 	echo wip
 
-alembic_downgrade:
+alembic_reset:
 	docker-compose run app alembic downgrade base
 
 migrate_down:
 	docker-compose run app alembic downgrade -1
+
+migrate_up:
+	docker-compose run app alembic upgrade +1
 
 migration:
 	docker compose run app alembic revision --autogenerate -m "$(msg)"

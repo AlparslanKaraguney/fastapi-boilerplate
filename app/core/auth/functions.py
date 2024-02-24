@@ -59,10 +59,10 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
         )
         username = payload.get("sub")
         if username is None:
-            raise HTTPException(status_code=401, detail="No autorizado")
+            raise HTTPException(status_code=401, detail="Token invalid")
         return username
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expirado")
+        raise HTTPException(status_code=401, detail="Token invalid")
     except jwt.JWTError:
         raise HTTPException(status_code=401, detail="Token invalid")
 

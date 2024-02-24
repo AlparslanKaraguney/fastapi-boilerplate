@@ -35,7 +35,7 @@ class User(ModelCore, table=True):
     is_verified: bool = False
 
     @staticmethod
-    def authenticate_user(username: str, password: str):
+    def authenticate_user(username: str, password: str) -> Tokens | None:
         # Validate the username exist
         if not (user := User.get_one(key=User.username, value=username)):
             return None
@@ -46,14 +46,16 @@ class User(ModelCore, table=True):
             return None
 
         # Create the pair of tokens
-        access_token = create_access_token(user.username)
+        access_token = create_access_token(username=username)
         refresh_token = create_jwt_token(
-            {"sub": user.username, "scopes": "refresh_token"},
+            {"sub": username, "scopes": "refresh_token"},
             timedelta(days=settings.refresh_token_expire_days),
         )
 
-        return Tokens(
+        tokens = Tokens(
             access_token=access_token,
             token_type="bearer",
             refresh_token=refresh_token,
         )
+
+        return tokens

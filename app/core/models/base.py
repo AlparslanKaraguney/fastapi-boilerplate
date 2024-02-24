@@ -5,6 +5,8 @@ from sqlmodel import Field, SQLModel
 from app.core.db.session import db
 
 from .record import Record
+from app.core.enums.source import Source
+from app.core.enums.action import Action
 
 
 class ModelCore(SQLModel):
@@ -16,18 +18,18 @@ class ModelCore(SQLModel):
     """
 
     id: int | None = Field(default=None, primary_key=True)
-    created_datetime: datetime = datetime.now()
-    modified_datetime: datetime = datetime.now()
+    created_at: datetime = datetime.now()
+    modified_at: datetime = datetime.now()
     deleted: bool = False
 
     def save(
         self,
-        source: str = "API",
-        action: str = "CREATE",
+        source: str = Source.API.value,
+        action: str = Action.CREATE.value,
         owner: str | None = None,
     ):
         """Method to save in the DB for creating or updating"""
-        self.modified_datetime = datetime.now()
+        self.modified_at = datetime.now()
         model = db.update(self)
 
         Record(
@@ -42,17 +44,17 @@ class ModelCore(SQLModel):
 
     def delete(
         self,
-        source: str = "API",
+        source: str = Source.API.value,
         owner: str | None = None,
         hard: bool = False,
     ) -> bool:
         """Soft delete: mark object as deleted in DB"""
         if hard:
             db.delete(self)
-            action = "HARD_DELETE"
+            action = Action.HARD_DELETE.value
         else:
             self.deleted = True
-            action = "SOFT_DELETE"
+            action = Action.SOFT_DELETE.value
             if not self.save():
                 return False
 

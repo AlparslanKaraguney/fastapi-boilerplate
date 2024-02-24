@@ -23,7 +23,7 @@ class UserAdmin(ModelViewCore, model=User):
 class RevokedTokenAdmin(ModelViewCore, model=RevokedToken):
     icon = "fa-solid fa-ban"
     column_list = [
-        RevokedToken.created_datetime,
+        RevokedToken.created_at,
         RevokedToken.username,
         RevokedToken.token,
     ]

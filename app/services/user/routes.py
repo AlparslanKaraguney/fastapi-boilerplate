@@ -1,15 +1,24 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    HTTPException,
+    Response,
+    status,
+)
 from fastapi.security import OAuth2PasswordRequestForm
-
 from app.core.auth.functions import (
     create_access_token,
     get_current_user,
     hash_password,
     verify_refresh_token,
 )
-
 from .models import RevokedToken, User
-from .schemas import RefreshToken, TokenRefreshed, Tokens, UserRegistration
+from .schemas import (
+    RefreshToken,
+    TokenRefreshed,
+    Tokens,
+    UserRegistration,
+)
 from app.core.db.session import db
 
 

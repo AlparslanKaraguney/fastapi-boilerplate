@@ -1,4 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    HTTPException,
+    Response,
+    status,
+    Request,
+)
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.core.auth.functions import (
@@ -33,12 +40,17 @@ router = APIRouter(prefix="/note", tags=["note"])
     },
     status_code=status.HTTP_201_CREATED,
 )
-def create_note(request_body: NoteCreate, response: Response):
+def create_note(
+    request_body: NoteCreate,
+    request: Request,
+    response: Response,
+):
     """Create new note
     - Check if the note exists
     - Save in DB
     return: Confirmation OR denial
     """
+    id = 0
     # Check if the note exists
     if Note.get_one(key=Note.title, value=request_body.title):
         raise HTTPException(
@@ -49,13 +61,13 @@ def create_note(request_body: NoteCreate, response: Response):
     note: Note = Note(
         title=request_body.title, description=request_body.description
     ).save()
-
     db.refresh(note)
+    id = note.id
 
-    todo: Todo = Todo(note_id=note.id, order=1).save()
+    todo: Todo = Todo(note_id=id, order=1).save()
 
     response.status_code = status.HTTP_201_CREATED
-    return f"Note '{note.title}' created"
+    return f"Note '{todo.order}' created"
 
 
 @router.get(

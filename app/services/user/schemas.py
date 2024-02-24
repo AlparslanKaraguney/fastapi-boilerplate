@@ -46,3 +46,10 @@ class RefreshToken(BaseModel):
         + "Q.UjNTD2hou-WnzsWagxY02JnRFc2ORNYP-gVRJb"
         + "56HZ4"
     )
+
+
+class UserSession(BaseModel):
+    id: int
+    email: str
+    role: str = ""
+    tokens: Tokens = Tokens()

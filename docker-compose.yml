@@ -22,29 +22,29 @@ services:
         target: /code
     depends_on:
       - db
-      - redis
-      - rabbitmq
-      - celery
+      # - redis
+      # - rabbitmq
+      # - celery
     env_file:
       - .env
 
-  celery:
-    build: .
-    command: celery -A app.core.celery worker --loglevel=info
-    depends_on:
-      - redis
-      - rabbitmq
+  # celery:
+  #   build: .
+  #   command: celery -A app.core.celery worker --loglevel=info
+  #   depends_on:
+  #     - redis
+  #     - rabbitmq
 
-  redis:
-    image: "redis:latest"
-    ports:
-      - "6379:6379"
+  # redis:
+  #   image: "redis:latest"
+  #   ports:
+  #     - "6379:6379"
 
-  rabbitmq:
-    image: rabbitmq:3.6-management
-    ports:
-      - "15672:15672"
-      - "5672:5672"
+  # rabbitmq:
+  #   image: rabbitmq:3.6-management
+  #   ports:
+  #     - "15672:15672"
+  #     - "5672:5672"
 
 volumes:
   db: {}

@@ -10,7 +10,7 @@ class Record(SQLModel, table=True):
 
     # TODO: Use enums instead of str for source and action?
     id: int | None = Field(default=None, primary_key=True)
-    created_datetime: datetime = datetime.now()
+    created_at: datetime = datetime.now()
     model_type: str
     model_id: int
     source: str  # Source of the change [API | ADMIN]

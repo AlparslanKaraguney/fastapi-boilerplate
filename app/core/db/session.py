@@ -54,8 +54,9 @@ class DBSessionMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ):
-        with db(commit_on_exit=self.commit_on_exit):
+        with db():
             response = await call_next(request)
+
             if response.status_code < 200 or response.status_code >= 300:
                 db.rollback()
             else:
@@ -164,9 +165,7 @@ class DBSessionMeta(type):
 
 
 class DBSession(metaclass=DBSessionMeta):
-    def __init__(
-        self, session_args: Dict = None, commit_on_exit: bool = False
-    ):
+    def __init__(self, session_args: Dict = None, commit_on_exit: bool = True):
         self.token = None
         self.session_args = session_args or {}
         self.commit_on_exit = commit_on_exit
