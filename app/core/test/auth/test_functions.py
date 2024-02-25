@@ -4,7 +4,7 @@ from unittest import TestCase
 from fastapi import HTTPException
 
 from app.core.auth.functions import (
-    create_access_token,
+    JWTBase,
     create_jwt_token,
     get_current_admin,
     get_current_user,
@@ -30,11 +30,21 @@ class TestPassword(TestCase):
 
 class TestToken(TestCase):
     def test_create_token(self):
-        access_token = create_access_token(username="test")
+        jwt_base = JWTBase(
+            id=0,
+            sub="test",
+            role="admin",
+        )
+        access_token = create_jwt_token(jwt_base)
         assert str == type(access_token)
 
     def test_get_current_user_ok(self):
-        access_token = create_access_token(username="test")
+        jwt_base = JWTBase(
+            id=0,
+            sub="test",
+            role="admin",
+        )
+        access_token = create_jwt_token(jwt_base)
         username = get_current_user(access_token)
         assert "test" == username
 

@@ -2,7 +2,11 @@ from fastapi import Request
 from fastapi.responses import RedirectResponse
 from sqladmin.authentication import AuthenticationBackend
 
-from app.core.auth.functions import create_access_token, get_current_admin
+from app.core.auth.functions import (
+    JWTBase,
+    create_jwt_token,
+    get_current_admin,
+)
 from app.settings import settings
 
 
@@ -19,7 +23,13 @@ class AdminAuth(AuthenticationBackend):
             return False
 
         # And update session
-        token = create_access_token(username=username)
+        jwt_base = JWTBase(
+            id=0,
+            sub=username,
+            role="admin",
+        )
+
+        token = create_jwt_token(jwt_base)
         request.session.update({"token": token})
 
         return True

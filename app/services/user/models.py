@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from sqlmodel import Field
 
 from app.core.auth.functions import (
-    create_access_token,
+    JWTBase,
     create_jwt_token,
     verify_password,
 )
@@ -46,11 +46,13 @@ class User(ModelCore, table=True):
             return None
 
         # Create the pair of tokens
-        access_token = create_access_token(username=username)
-        refresh_token = create_jwt_token(
-            {"sub": username, "scopes": "refresh_token"},
-            timedelta(days=settings.refresh_token_expire_days),
+        jwt_base = JWTBase(
+            id=user.id,
+            sub=username,
+            role="",
         )
+        access_token = create_jwt_token(jwt_base)
+        refresh_token = create_jwt_token(jwt_base, refresh=True)
 
         tokens = Tokens(
             access_token=access_token,

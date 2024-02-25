@@ -7,7 +7,8 @@ from fastapi import (
 )
 from fastapi.security import OAuth2PasswordRequestForm
 from app.core.auth.functions import (
-    create_access_token,
+    JWTBase,
+    create_jwt_token,
     get_current_user,
     hash_password,
     verify_refresh_token,
@@ -117,14 +118,18 @@ def refresh_token(refresh_token: RefreshToken):
     if not (payload := verify_refresh_token(refresh_token)):
         raise HTTPException(status_code=400, detail="Not authorized")
 
-    username = payload.get("sub")
+    jwt_base = JWTBase(
+        id=payload.get("id"),
+        sub=payload.get("sub"),
+        role=payload.get("role"),
+    )
 
     # Check if the refresh token is revoked
     if RevokedToken.is_revoked(refresh_token):
         raise HTTPException(status_code=400, detail="Revoked refresh token")
 
     # Return new access token
-    access_token = create_access_token(username)
+    access_token = create_jwt_token(jwt_base)
     return TokenRefreshed(access_token=access_token, token_type="bearer")
 
 

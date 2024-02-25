@@ -1,8 +1,7 @@
 import pytest
 from fastapi.responses import RedirectResponse
-
 from app.core.admin.auth import AdminAuth
-from app.core.auth.functions import create_access_token
+from app.core.auth.functions import JWTBase, create_jwt_token
 from app.settings import settings
 
 
@@ -25,7 +24,12 @@ def admin_auth():
 
 @pytest.fixture
 def valid_token():
-    return create_access_token(username=settings.admin_user)
+    jwt_base = JWTBase(
+        id=0,
+        sub=settings.admin_user,
+        role="admin",
+    )
+    return create_jwt_token(jwt_base)
 
 
 @pytest.mark.asyncio

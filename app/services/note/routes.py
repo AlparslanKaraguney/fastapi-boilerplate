@@ -6,14 +6,6 @@ from fastapi import (
     status,
     Request,
 )
-from fastapi.security import OAuth2PasswordRequestForm
-
-from app.core.auth.functions import (
-    create_access_token,
-    get_current_user,
-    hash_password,
-    verify_refresh_token,
-)
 from app.services.note.schemas import NoteCreate
 from app.core.db.session import db
 

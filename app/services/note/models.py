@@ -1,14 +1,5 @@
-from datetime import datetime, timedelta
-
 from sqlmodel import Field
-
-from app.core.auth.functions import (
-    create_access_token,
-    create_jwt_token,
-    verify_password,
-)
 from app.core.models.base import ModelCore
-from app.settings import settings
 
 
 class Note(ModelCore, table=True):
