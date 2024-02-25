@@ -67,7 +67,7 @@ class TestToken(TestCase):
             get_current_user(access_token)
 
     def test_get_current_admin_ok(self):
-        access_token = create_access_token(username="test")
+        access_token = create_jwt_token(username="test")
         username = get_current_admin(access_token)
         assert "test" == username
 
