@@ -68,6 +68,14 @@
 - **Frontend friendly**: auto generation of SDK Typescript client.
 <!-- - **Rock-Solid Reliability**: CI, pre-commit, integrity testing and covered by unit test at +95%. -->
 
+## TODO
+
+- **Role Management**: User based and role based role management will be added.
+- **Logging**: Request logging will be added. This can be basic request logging with current db or elastichsearch.
+- **Email Service**: Mail service will be added for basic usage.
+- **Storage Service**: File storage service like minio, S3, etc. This will be generic so you can easily adapt your own service. Just implementing your functions.
+- **Caching**: Caching mechanism will be added.
+
 ## ⚙️ Requirements
 
 - [Python 3.11](https://www.python.org/downloads/release/python-3114/)
